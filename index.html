@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>코트사이드 테니스 클럽</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F7F7F2;
+    --bg-raised: #FFFFFF;
+    --ink: #1F2A22;
+    --ink-soft: #56604F;
+    --court: #2F4538;
+    --court-deep: #223228;
+    --ball: #D7E639;
+    --ball-deep: #AEBE1E;
+    --clay: #C1543C;
+    --line: #DEDFD2;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Space Grotesk',sans-serif;
+    color:var(--court-deep);
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+  .container{max-width:960px;margin:0 auto;padding:0 24px;}
+
+  /* ---------- Header ---------- */
+  header.site-header{
+    background:var(--court);
+    border-bottom:3px solid var(--ball);
+  }
+  .header-inner{
+    max-width:960px;margin:0 auto;padding:0 24px;
+    display:flex;align-items:center;justify-content:space-between;
+    height:68px;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;font-size:20px;color:#fff;
+  }
+  .brand .dot{
+    width:14px;height:14px;border-radius:50%;
+    background:var(--ball);
+    box-shadow:0 0 0 3px rgba(215,230,57,0.25);
+  }
+  nav.main-nav{display:flex;gap:4px;}
+  nav.main-nav a{
+    color:rgba(255,255,255,0.78);
+    font-size:14.5px;font-weight:500;
+    padding:10px 14px;border-radius:var(--radius);
+    transition:color .15s ease, background .15s ease;
+    white-space:nowrap;
+  }
+  nav.main-nav a:hover{color:#fff;background:rgba(255,255,255,0.08);}
+  nav.main-nav a.active{color:var(--court-deep);background:var(--ball);}
+  .nav-toggle{display:none;background:none;border:none;color:#fff;font-size:22px;padding:6px;}
+
+  @media (max-width:720px){
+    nav.main-nav{
+      display:none;position:absolute;top:68px;left:0;right:0;
+      background:var(--court);flex-direction:column;gap:0;
+      padding:8px 16px 16px;border-bottom:3px solid var(--ball);
+      z-index:50;
+    }
+    nav.main-nav.open{display:flex;}
+    nav.main-nav a{padding:12px 8px;}
+    .nav-toggle{display:block;}
+  }
+
+  /* ---------- Court-line divider ---------- */
+  .court-rule{
+    border:none;border-top:1px solid var(--line);
+    position:relative;margin:40px 0;
+  }
+  .court-rule::after{
+    content:"";position:absolute;top:-3px;left:0;
+    width:46px;height:5px;background:var(--ball);
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:72px 0 56px;border-bottom:1px solid var(--line);
+  }
+  .hero .eyebrow-line{
+    display:flex;align-items:center;gap:10px;
+    color:var(--clay);font-weight:600;font-size:14px;margin-bottom:18px;
+  }
+  .hero .eyebrow-line span.bar{width:28px;height:2px;background:var(--clay);display:inline-block;}
+  .hero h1{
+    font-size:44px;line-height:1.15;max-width:640px;
+  }
+  .hero p.lead{
+    max-width:520px;color:var(--ink-soft);font-size:16.5px;margin-top:18px;
+  }
+  .hero-actions{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 22px;border-radius:var(--radius);
+    font-weight:600;font-size:14.5px;border:1.5px solid transparent;
+  }
+  .btn-primary{background:var(--court);color:#fff;}
+  .btn-primary:hover{background:var(--court-deep);}
+  .btn-outline{border-color:var(--court);color:var(--court);background:transparent;}
+  .btn-outline:hover{background:var(--court);color:#fff;}
+  .btn-ball{background:var(--ball);color:var(--court-deep);}
+  .btn-ball:hover{background:var(--ball-deep);}
+  .btn-danger{border-color:var(--clay);color:var(--clay);background:transparent;}
+  .btn-danger:hover{background:var(--clay);color:#fff;}
+  .btn-sm{padding:8px 14px;font-size:13.5px;}
+  .btn:disabled{opacity:0.45;cursor:not-allowed;}
+
+  /* ---------- Section ---------- */
+  section{padding:48px 0;}
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:26px;flex-wrap:wrap;gap:10px;}
+  .section-head h2{font-size:26px;}
+  .section-head .count{color:var(--ink-soft);font-size:14px;}
+
+  /* ---------- Next match stat ---------- */
+  .stat-row{display:flex;gap:0;border:1px solid var(--line);margin-top:36px;}
+  .stat-cell{flex:1;padding:20px 22px;border-right:1px solid var(--line);}
+  .stat-cell:last-child{border-right:none;}
+  .stat-cell .stat-label{font-size:13px;color:var(--ink-soft);margin-bottom:6px;}
+  .stat-cell .stat-value{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;color:var(--court-deep);}
+  @media (max-width:640px){.stat-row{flex-direction:column;}.stat-cell{border-right:none;border-bottom:1px solid var(--line);}.stat-cell:last-child{border-bottom:none;}}
+
+  /* ---------- List rows (posts/events) ---------- */
+  .row-list{border-top:1px solid var(--line);}
+  .row-item{
+    display:flex;align-items:center;gap:16px;
+    padding:18px 4px;border-bottom:1px solid var(--line);
+  }
+  .row-item:hover{background:rgba(47,69,56,0.03);}
+  .row-tag{
+    font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:2px;
+    flex-shrink:0;letter-spacing:0.02em;
+  }
+  .tag-notice{background:var(--clay);color:#fff;}
+  .tag-free{background:var(--line);color:var(--ink-soft);}
+  .tag-regular{background:var(--court);color:#fff;}
+  .tag-small{background:var(--ball);color:var(--court-deep);}
+  .row-main{flex:1;min-width:0;}
+  .row-title{font-weight:600;font-size:15.5px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .row-meta{font-size:13px;color:var(--ink-soft);margin-top:3px;}
+  .row-arrow{color:var(--ink-soft);font-size:13px;flex-shrink:0;}
+  .empty-state{padding:40px 4px;color:var(--ink-soft);text-align:center;border-top:1px solid var(--line);}
+
+  /* ---------- Cards for events ---------- */
+  .event-card{
+    border:1px solid var(--line);padding:22px 24px;margin-bottom:14px;
+    display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  }
+  .event-card .ev-left{flex:1;min-width:220px;}
+  .event-card .ev-tag{margin-bottom:10px;display:inline-block;}
+  .event-card h3{font-size:18px;margin-bottom:6px;}
+  .event-card .ev-meta{font-size:13.5px;color:var(--ink-soft);margin-bottom:4px;}
+  .event-card .ev-desc{font-size:14px;color:var(--ink-soft);margin-top:10px;max-width:520px;}
+  .event-card .ev-right{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:10px;}
+  .applicant-count{font-size:13px;color:var(--ink-soft);}
+  .applicant-count b{color:var(--court-deep);}
+
+  /* ---------- Forms ---------- */
+  .form-box{border:1px solid var(--line);padding:28px 26px;background:var(--bg-raised);}
+  .field{margin-bottom:18px;}
+  .field label{display:block;font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:7px;}
+  .field input, .field textarea, .field select{
+    width:100%;padding:11px 13px;border:1px solid var(--line);
+    border-radius:var(--radius);font-family:inherit;font-size:14.5px;
+    background:#fff;color:var(--ink);
+  }
+  .field input:focus, .field textarea:focus, .field select:focus{
+    outline:none;border-color:var(--court);
+  }
+  .field textarea{resize:vertical;min-height:120px;}
+  .field-row{display:flex;gap:16px;}
+  .field-row .field{flex:1;}
+  .form-actions{display:flex;gap:10px;margin-top:6px;}
+  .helper-text{font-size:12.5px;color:var(--ink-soft);margin-top:6px;}
+
+  /* ---------- Post detail ---------- */
+  .post-detail-head{border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:26px;}
+  .post-detail-head h2{font-size:24px;margin-bottom:10px;}
+  .post-detail-meta{font-size:13.5px;color:var(--ink-soft);display:flex;gap:14px;flex-wrap:wrap;}
+  .post-body{white-space:pre-wrap;font-size:15px;color:var(--ink);min-height:80px;}
+  .post-detail-actions{display:flex;gap:8px;margin-top:26px;}
+
+  /* ---------- Comments ---------- */
+  .comment-list{margin-top:14px;}
+  .comment-item{padding:14px 0;border-bottom:1px solid var(--line);}
+  .comment-item .c-head{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-soft);margin-bottom:6px;}
+  .comment-item .c-author{font-weight:600;color:var(--ink);}
+  .comment-item .c-body{font-size:14.5px;}
+  .comment-form{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;}
+  .comment-form input{flex:1;min-width:120px;}
+  .comment-form textarea{flex:3;min-width:200px;min-height:44px;}
+
+  /* ---------- Toast ---------- */
+  #toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--court-deep);color:#fff;padding:13px 22px;border-radius:var(--radius);
+    font-size:14px;font-weight:500;opacity:0;pointer-events:none;transition:all .25s ease;
+    z-index:200;box-shadow:0 6px 20px rgba(0,0,0,0.18);
+  }
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  /* ---------- Modal ---------- */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(31,42,34,0.45);
+    display:none;align-items:center;justify-content:center;z-index:100;padding:20px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{
+    background:#fff;max-width:440px;width:100%;padding:28px 26px;
+    border-top:4px solid var(--ball);
+  }
+  .modal-box h3{font-size:18px;margin-bottom:6px;}
+  .modal-box .modal-sub{font-size:13.5px;color:var(--ink-soft);margin-bottom:20px;}
+
+  footer{
+    background:var(--court-deep);color:rgba(255,255,255,0.7);
+    padding:36px 0;margin-top:40px;font-size:13.5px;
+  }
+  footer .container{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  footer .brand{color:#fff;}
+
+  .page-title-bar{padding:40px 0 8px;border-bottom:1px solid var(--line);margin-bottom:8px;}
+  .page-title-bar h1{font-size:30px;}
+  .page-title-bar p{color:var(--ink-soft);margin-top:8px;font-size:14.5px;}
+
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:8px;}
+  @media (max-width:680px){.about-grid{grid-template-columns:1fr;}}
+  .about-block h3{font-size:16px;margin-bottom:10px;}
+  .about-block p, .about-block li{color:var(--ink-soft);font-size:14.5px;}
+  .about-block ul{padding-left:18px;margin:0;}
+  .about-block li{margin-bottom:6px;}
+
+  .loading-row{padding:30px 4px;color:var(--ink-soft);font-size:14px;}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="#/" class="brand"><span class="dot"></span>코트사이드 테니스 클럽</a>
+    <button class="nav-toggle" id="navToggle">&#9776;</button>
+    <nav class="main-nav" id="mainNav">
+      <a href="#/" data-route="/">홈</a>
+      <a href="#/about" data-route="/about">소개</a>
+      <a href="#/events/regular" data-route="/events/regular">정기모임</a>
+      <a href="#/events/small" data-route="/events/small">소모임</a>
+      <a href="#/board/notice" data-route="/board/notice">공지사항</a>
+      <a href="#/board/free" data-route="/board/free">자유게시판</a>
+    </nav>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  <div class="container">
+    <div class="brand">코트사이드 테니스 클럽</div>
+    <div>매월 정기모임과 소모임으로 함께 라켓을 잡는 동호회입니다.</div>
+  </div>
+</footer>
+
+<div id="toast"></div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box" id="modalBox"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+/* =========================================================
+   설정
+   ========================================================= */
+const SUPABASE_URL = "https://autcncvviobcycctmxgj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_QzLLUC8-fYoCnaQAA8klOg_sdZWo8QS";
+const PREFIX = "tc_";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const T = {
+  posts: PREFIX + "posts",
+  comments: PREFIX + "comments",
+  events: PREFIX + "events",
+  applications: PREFIX + "applications",
+};
+
+/* =========================================================
+   유틸
+   ========================================================= */
+function esc(str){
+  if(str === null || str === undefined) return "";
+  return String(str)
+    .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+function fmtDate(d){
+  if(!d) return "";
+  const date = new Date(d + (d.length===10 ? "T00:00:00" : ""));
+  if(isNaN(date)) return d;
+  return `${date.getFullYear()}.${String(date.getMonth()+1).padStart(2,"0")}.${String(date.getDate()).padStart(2,"0")}`;
+}
+function fmtDateTime(d){
+  const date = new Date(d);
+  if(isNaN(date)) return d;
+  return `${fmtDate(d)} ${String(date.getHours()).padStart(2,"0")}:${String(date.getMinutes()).padStart(2,"0")}`;
+}
+function toast(msg){
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=>el.classList.remove("show"), 2200);
+}
+function openModal(html){
+  document.getElementById("modalBox").innerHTML = html;
+  document.getElementById("modalOverlay").classList.add("open");
+}
+function closeModal(){
+  document.getElementById("modalOverlay").classList.remove("open");
+}
+document.getElementById("modalOverlay").addEventListener("click",(e)=>{
+  if(e.target.id === "modalOverlay") closeModal();
+});
+
+const app = document.getElementById("app");
+
+/* =========================================================
+   라우터
+   ========================================================= */
+function parseHash(){
+  const h = location.hash.replace(/^#/, "") || "/";
+  return h.split("?")[0];
+}
+function navActive(){
+  const path = parseHash();
+  document.querySelectorAll("nav.main-nav a").forEach(a=>{
+    const r = a.getAttribute("data-route");
+    const isActive = r === "/" ? path === "/" : path.startsWith(r);
+    a.classList.toggle("active", isActive);
+  });
+  document.getElementById("mainNav").classList.remove("open");
+}
+
+async function router(){
+  navActive();
+  const path = parseHash();
+  const parts = path.split("/").filter(Boolean);
+  window.scrollTo({top:0,behavior:"instant"});
+
+  try{
+    if(parts.length===0){ return renderHome(); }
+    if(parts[0]==="about"){ return renderAbout(); }
+    if(parts[0]==="events" && parts[1] && !parts[2]){ return renderEventsList(parts[1]); }
+    if(parts[0]==="events" && parts[1] && parts[2]==="new"){ return renderEventForm(parts[1]); }
+    if(parts[0]==="events" && parts[1] && parts[2]==="detail" && parts[3]){ return renderEventDetail(parts[1], parts[3]); }
+    if(parts[0]==="board" && parts[1] && !parts[2]){ return renderBoardList(parts[1]); }
+    if(parts[0]==="board" && parts[1] && parts[2]==="new"){ return renderPostForm(parts[1]); }
+    if(parts[0]==="board" && parts[1] && parts[2]==="edit" && parts[3]){ return renderPostForm(parts[1], parts[3]); }
+    if(parts[0]==="board" && parts[1] && parts[2]==="view" && parts[3]){ return renderPostDetail(parts[1], parts[3]); }
+    render404();
+  }catch(err){
+    console.error(err);
+    app.innerHTML = `<div class="container" style="padding:60px 0;"><p>문제가 발생했습니다: ${esc(err.message||err)}</p></div>`;
+  }
+}
+window.addEventListener("hashchange", router);
+document.getElementById("navToggle").addEventListener("click", ()=>{
+  document.getElementById("mainNav").classList.toggle("open");
+});
+
+/* =========================================================
+   홈
+   ========================================================= */
+async function renderHome(){
+  app.innerHTML = `
+    <div class="hero">
+      <div class="container">
+        <div class="eyebrow-line"><span class="bar"></span>매월 코트에서 만나요</div>
+        <h1>랠리는 계속되고,<br>모임은 매달 열립니다.</h1>
+        <p class="lead">코트사이드는 매월 정기모임과 자유롭게 여는 소모임으로 시합을 즐기는 테니스 동호회입니다. 초보부터 고수까지, 라켓 하나면 충분합니다.</p>
+        <div class="hero-actions">
+          <a href="#/events/regular" class="btn btn-primary">정기모임 신청하기</a>
+          <a href="#/events/small" class="btn btn-outline">소모임 둘러보기</a>
+        </div>
+        <div class="stat-row" id="homeStats">
+          <div class="stat-cell"><div class="stat-label">다음 정기모임</div><div class="stat-value">불러오는 중…</div></div>
+          <div class="stat-cell"><div class="stat-label">열려있는 소모임</div><div class="stat-value">불러오는 중…</div></div>
+          <div class="stat-cell"><div class="stat-label">이번 달 새 글</div><div class="stat-value">불러오는 중…</div></div>
+        </div>
+      </div>
+    </div>
+
+    <section class="container">
+      <div class="section-head">
+        <h2>다가오는 모임</h2>
+        <a href="#/events/regular" class="btn btn-outline btn-sm">전체 보기</a>
+      </div>
+      <div class="row-list" id="homeEvents"><div class="loading-row">불러오는 중…</div></div>
+    </section>
+
+    <hr class="court-rule">
+
+    <section class="container" style="padding-top:0;">
+      <div class="section-head">
+        <h2>최근 게시글</h2>
+        <a href="#/board/notice" class="btn btn-outline btn-sm">전체 보기</a>
+      </div>
+      <div class="row-list" id="homePosts"><div class="loading-row">불러오는 중…</div></div>
+    </section>
+  `;
+
+  const today = new Date().toISOString().slice(0,10);
+
+  const [{data: nextRegular}, {data: openSmall}, {data: recentPosts}, {count: monthPostCount}] = await Promise.all([
+    sb.from(T.events).select("*").eq("event_type","regular").gte("event_date", today).order("event_date",{ascending:true}).limit(1),
+    sb.from(T.events).select("id",{count:"exact"}).eq("event_type","small").gte("event_date", today),
+    sb.from(T.posts).select("*").order("created_at",{ascending:false}).limit(5),
+    sb.from(T.posts).select("id",{count:"exact",head:true}).gte("created_at", new Date(new Date().getFullYear(), new Date().getMonth(),1).toISOString())
+  ]);
+
+  const statCells = document.querySelectorAll("#homeStats .stat-cell .stat-value");
+  statCells[0].textContent = nextRegular && nextRegular[0] ? `${fmtDate(nextRegular[0].event_date)} · ${nextRegular[0].title}` : "예정된 모임 없음";
+  statCells[1].textContent = (openSmall?.length ?? 0) + "건";
+  statCells[2].textContent = (monthPostCount ?? 0) + "건";
+
+  const {data: upcoming} = await sb.from(T.events).select("*").gte("event_date", today).order("event_date",{ascending:true}).limit(5);
+  const evWrap = document.getElementById("homeEvents");
+  if(!upcoming || upcoming.length===0){
+    evWrap.innerHTML = `<div class="empty-state">예정된 모임이 아직 없습니다.</div>`;
+  }else{
+    evWrap.innerHTML = `<div class="row-list">` + upcoming.map(ev=>`
+      <a class="row-item" href="#/events/detail/${ev.event_type}/${ev.id}">
+        <span class="row-tag ${ev.event_type==='regular'?'tag-regular':'tag-small'}">${ev.event_type==='regular'?'정기모임':'소모임'}</span>
+        <span class="row-main">
+          <div class="row-title">${esc(ev.title)}</div>
+          <div class="row-meta">${fmtDate(ev.event_date)} · ${esc(ev.location)}</div>
+        </span>
+        <span class="row-arrow">›</span>
+      </a>
+    `).join("") + `</div>`;
+  }
+
+  const postWrap = document.getElementById("homePosts");
+  if(!recentPosts || recentPosts.length===0){
+    postWrap.innerHTML = `<div class="empty-state">등록된 글이 없습니다.</div>`;
+  }else{
+    postWrap.innerHTML = `<div class="row-list">` + recentPosts.map(p=>`
+      <a class="row-item" href="#/board/${p.board_type}/view/${p.id}">
+        <span class="row-tag ${p.board_type==='notice'?'tag-notice':'tag-free'}">${p.board_type==='notice'?'공지':'자유'}</span>
+        <span class="row-main">
+          <div class="row-title">${esc(p.title)}</div>
+          <div class="row-meta">${esc(p.author)} · ${fmtDate(p.created_at.slice(0,10))}</div>
+        </span>
+        <span class="row-arrow">›</span>
+      </a>
+    `).join("") + `</div>`;
+  }
+}
+
+/* =========================================================
+   소개
+   ========================================================= */
+function renderAbout(){
+  app.innerHTML = `
+    <div class="container">
+      <div class="page-title-bar">
+        <h1>클럽 소개</h1>
+        <p>코트사이드는 실력보다 꾸준함을 응원하는 테니스 동호회입니다.</p>
+      </div>
+      <div class="about-grid">
+        <div class="about-block">
+          <h3>운영 방식</h3>
+          <ul>
+            <li>매월 첫째 주 토요일, 정기모임에서 다 함께 시합을 진행합니다.</li>
+            <li>소모임은 회원 누구나 원하는 날짜와 장소로 열 수 있습니다.</li>
+            <li>정기모임·소모임 모두 게시판에서 신청 후 참여합니다.</li>
+          </ul>
+        </div>
+        <div class="about-block">
+          <h3>이런 분께 추천해요</h3>
+          <ul>
+            <li>혼자 레슨만 받다가 실전 감각을 키우고 싶은 분</li>
+            <li>평일 저녁이나 주말에 가볍게 랠리 칠 상대가 필요한 분</li>
+            <li>정기적으로 시합 경험을 쌓고 싶은 분</li>
+          </ul>
+        </div>
+        <div class="about-block">
+          <h3>준비물</h3>
+          <ul>
+            <li>본인 라켓 (초보자는 대여 가능, 게시판에 문의)</li>
+            <li>실내화가 아닌 코트 전용 테니스화</li>
+            <li>여벌의 티셔츠와 물</li>
+          </ul>
+        </div>
+        <div class="about-block">
+          <h3>회비 안내</h3>
+          <ul>
+            <li>월 회비 3만원 — 코트 대관 및 공용 물품 구입에 사용</li>
+            <li>소모임은 참가자끼리 코트비를 나누어 부담합니다.</li>
+            <li>회비 관련 문의는 공지사항 게시판을 확인해주세요.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function render404(){
+  app.innerHTML = `<div class="container" style="padding:80px 0;text-align:center;">
+    <h2>페이지를 찾을 수 없습니다</h2>
+    <p style="color:var(--ink-soft);margin-top:10px;"><a href="#/" class="btn btn-outline" style="margin-top:16px;">홈으로 돌아가기</a></p>
+  </div>`;
+}
+
+/* =========================================================
+   모임(이벤트) - 목록
+   ========================================================= */
+const EVENT_LABEL = {regular:"정기모임", small:"소모임"};
+
+async function renderEventsList(type){
+  if(!["regular","small"].includes(type)) return render404();
+  const label = EVENT_LABEL[type];
+  app.innerHTML = `
+    <div class="container">
+      <div class="page-title-bar">
+        <h1>${label}</h1>
+        <p>${type==='regular' ? '매월 열리는 정기모임 일정을 확인하고 신청하세요.' : '회원이 자유롭게 여는 소모임입니다. 직접 소모임을 만들 수도 있어요.'}</p>
+      </div>
+      <div class="section-head" style="margin-top:24px;">
+        <span class="count" id="evCount">불러오는 중…</span>
+        <a href="#/events/${type}/new" class="btn btn-ball btn-sm">${label} 만들기</a>
+      </div>
+      <div id="evList"><div class="loading-row">불러오는 중…</div></div>
+    </div>
+  `;
+
+  const {data: events, error} = await sb.from(T.events).select("*").eq("event_type", type).order("event_date",{ascending:true});
+  if(error) throw error;
+
+  document.getElementById("evCount").textContent = `총 ${events.length}건`;
+  const listEl = document.getElementById("evList");
+
+  if(events.length===0){
+    listEl.innerHTML = `<div class="empty-state">등록된 ${label}이 없습니다. 첫 모임을 만들어보세요.</div>`;
+    return;
+  }
+
+  const ids = events.map(e=>e.id);
+  const {data: apps} = await sb.from(T.applications).select("event_id").in("event_id", ids);
+  const countMap = {};
+  (apps||[]).forEach(a=> countMap[a.event_id] = (countMap[a.event_id]||0)+1 );
+
+  listEl.innerHTML = events.map(ev=>`
+    <div class="event-card">
+      <div class="ev-left">
+        <span class="row-tag ev-tag ${type==='regular'?'tag-regular':'tag-small'}">${label}</span>
+        <h3><a href="#/events/detail/${type}/${ev.id}">${esc(ev.title)}</a></h3>
+        <div class="ev-meta">${fmtDate(ev.event_date)}${ev.event_time ? " · "+esc(ev.event_time) : ""}</div>
+        <div class="ev-meta">${esc(ev.location)}</div>
+        ${ev.description ? `<div class="ev-desc">${esc(ev.description)}</div>` : ""}
+      </div>
+      <div class="ev-right">
+        <div class="applicant-count"><b>${countMap[ev.id]||0}</b>${ev.max_participants ? ` / ${ev.max_participants}` : ""}명 신청</div>
+        <a href="#/events/detail/${type}/${ev.id}" class="btn btn-primary btn-sm">신청하기</a>
+      </div>
+    </div>
+  `).join("");
+}
+
+/* =========================================================
+   모임 - 새로 만들기
+   ========================================================= */
+function renderEventForm(type){
+  if(!["regular","small"].includes(type)) return render404();
+  const label = EVENT_LABEL[type];
+  app.innerHTML = `
+    <div class="container" style="max-width:600px;">
+      <div class="page-title-bar">
+        <h1>${label} 만들기</h1>
+        <p>모임 정보를 입력하면 목록에 바로 등록됩니다.</p>
+      </div>
+      <div class="form-box" style="margin-top:24px;">
+        <div class="field"><label>모임 제목</label><input id="f-title" type="text" placeholder="예: 평일 저녁 번개모임"></div>
+        <div class="field-row">
+          <div class="field"><label>날짜</label><input id="f-date" type="date"></div>
+          <div class="field"><label>시간</label><input id="f-time" type="text" placeholder="예: 19:00 ~ 21:00"></div>
+        </div>
+        <div class="field"><label>장소</label><input id="f-location" type="text" placeholder="예: 잠실 테니스장 1번 코트"></div>
+        <div class="field"><label>모집 인원 (선택)</label><input id="f-max" type="number" min="1" placeholder="예: 4"></div>
+        <div class="field"><label>주최자 이름</label><input id="f-host" type="text" placeholder="이름을 입력하세요"></div>
+        <div class="field"><label>설명 (선택)</label><textarea id="f-desc" placeholder="모임에 대한 안내를 적어주세요"></textarea></div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="btnCreateEvent">등록하기</button>
+          <a href="#/events/${type}" class="btn btn-outline">취소</a>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById("btnCreateEvent").addEventListener("click", async ()=>{
+    const title = document.getElementById("f-title").value.trim();
+    const date = document.getElementById("f-date").value;
+    const time = document.getElementById("f-time").value.trim();
+    const venue = document.getElementById("f-location").value.trim();
+    const max = document.getElementById("f-max").value;
+    const host = document.getElementById("f-host").value.trim();
+    const desc = document.getElementById("f-desc").value.trim();
+    if(!title || !date || !venue || !host){
+      toast("제목, 날짜, 장소, 주최자 이름은 필수입니다.");
+      return;
+    }
+    const {error} = await sb.from(T.events).insert({
+      event_type: type, title, event_date: date, event_time: time || null,
+      location: venue, max_participants: max ? parseInt(max) : null,
+      host_name: host, description: desc || null
+    });
+    if(error){ toast("등록 실패: "+error.message); return; }
+    toast(`${label}이 등록되었습니다.`);
+    window.location.hash = `#/events/${type}`;
+  });
+}
+
+/* =========================================================
+   모임 - 상세 + 신청
+   ========================================================= */
+async function renderEventDetail(type, id){
+  if(!["regular","small"].includes(type)) return render404();
+  app.innerHTML = `<div class="container"><div class="loading-row">불러오는 중…</div></div>`;
+
+  const {data: ev, error} = await sb.from(T.events).select("*").eq("id", id).single();
+  if(error || !ev) return render404();
+
+  const {data: apps} = await sb.from(T.applications).select("*").eq("event_id", id).order("created_at",{ascending:true});
+  const label = EVENT_LABEL[type];
+  const full = ev.max_participants && apps && apps.length >= ev.max_participants;
+
+  app.innerHTML = `
+    <div class="container" style="max-width:700px;">
+      <div class="post-detail-head" style="border-bottom:none;padding-bottom:0;">
+        <span class="row-tag ${type==='regular'?'tag-regular':'tag-small'}" style="margin-bottom:12px;display:inline-block;">${label}</span>
+        <h2>${esc(ev.title)}</h2>
+        <div class="post-detail-meta">
+          <span>${fmtDate(ev.event_date)}${ev.event_time ? " · "+esc(ev.event_time) : ""}</span>
+          <span>${esc(ev.location)}</span>
+          <span>주최: ${esc(ev.host_name||"-")}</span>
+        </div>
+      </div>
+      ${ev.description ? `<div class="post-body" style="margin-top:20px;">${esc(ev.description)}</div>` : ""}
+
+      <hr class="court-rule">
+
+      <div class="section-head">
+        <h2 style="font-size:19px;">신청자 명단</h2>
+        <span class="applicant-count"><b>${apps?apps.length:0}</b>${ev.max_participants?` / ${ev.max_participants}`:""}명</span>
+      </div>
+      <div class="row-list" id="appList" style="margin-bottom:24px;"></div>
+
+      <div class="form-box">
+        <h3 style="font-size:16px;margin-bottom:16px;">${full ? "모집이 마감되었습니다" : "참가 신청하기"}</h3>
+        <div class="field-row">
+          <div class="field"><label>이름</label><input id="ap-name" type="text" placeholder="이름을 입력하세요" ${full?"disabled":""}></div>
+          <div class="field"><label>연락처 (선택)</label><input id="ap-phone" type="text" placeholder="010-0000-0000" ${full?"disabled":""}></div>
+        </div>
+        <div class="field"><label>한마디 (선택)</label><input id="ap-memo" type="text" placeholder="하고 싶은 말을 남겨보세요" ${full?"disabled":""}></div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="btnApply" ${full?"disabled":""}>신청하기</button>
+        </div>
+      </div>
+
+      <div class="post-detail-actions">
+        <a href="#/events/${type}" class="btn btn-outline btn-sm">목록으로</a>
+        <button class="btn btn-danger btn-sm" id="btnDeleteEvent">모임 삭제</button>
+      </div>
+    </div>
+  `;
+
+  function renderApps(list){
+    const wrap = document.getElementById("appList");
+    if(!list || list.length===0){
+      wrap.innerHTML = `<div class="empty-state">아직 신청자가 없습니다.</div>`;
+      return;
+    }
+    wrap.innerHTML = list.map(a=>`
+      <div class="row-item">
+        <span class="row-main">
+          <div class="row-title">${esc(a.applicant_name)} ${a.memo ? `<span style="color:var(--ink-soft);font-weight:400;">· ${esc(a.memo)}</span>` : ""}</div>
+          <div class="row-meta">${a.phone?esc(a.phone)+" · ":""}${fmtDateTime(a.created_at)}</div>
+        </span>
+        <button class="btn btn-outline btn-sm" data-cancel="${a.id}">취소</button>
+      </div>
+    `).join("");
+    wrap.querySelectorAll("[data-cancel]").forEach(btn=>{
+      btn.addEventListener("click", async ()=>{
+        if(!confirm("신청을 취소할까요?")) return;
+        const {error} = await sb.from(T.applications).delete().eq("id", btn.getAttribute("data-cancel"));
+        if(error){ toast("취소 실패: "+error.message); return; }
+        toast("신청이 취소되었습니다.");
+        renderEventDetail(type, id);
+      });
+    });
+  }
+  renderApps(apps);
+
+  document.getElementById("btnApply")?.addEventListener("click", async ()=>{
+    const name = document.getElementById("ap-name").value.trim();
+    const phone = document.getElementById("ap-phone").value.trim();
+    const memo = document.getElementById("ap-memo").value.trim();
+    if(!name){ toast("이름을 입력해주세요."); return; }
+    const {error} = await sb.from(T.applications).insert({event_id: id, applicant_name: name, phone: phone||null, memo: memo||null});
+    if(error){ toast("신청 실패: "+error.message); return; }
+    toast("신청이 완료되었습니다!");
+    renderEventDetail(type, id);
+  });
+
+  document.getElementById("btnDeleteEvent").addEventListener("click", async ()=>{
+    if(!confirm("이 모임을 삭제할까요? 신청 내역도 함께 삭제됩니다.")) return;
+    const {error} = await sb.from(T.events).delete().eq("id", id);
+    if(error){ toast("삭제 실패: "+error.message); return; }
+    toast("모임이 삭제되었습니다.");
+    location.hash = `#/events/${type}`;
+  });
+}
+
+/* =========================================================
+   게시판 - 목록 (CRUD: Read)
+   ========================================================= */
+const BOARD_LABEL = {notice:"공지사항", free:"자유게시판"};
+
+async function renderBoardList(type){
+  if(!["notice","free"].includes(type)) return render404();
+  const label = BOARD_LABEL[type];
+  app.innerHTML = `
+    <div class="container">
+      <div class="page-title-bar">
+        <h1>${label}</h1>
+        <p>${type==='notice' ? '운영진이 전달하는 공지를 확인하세요.' : '자유롭게 이야기를 나누는 공간입니다.'}</p>
+      </div>
+      <div class="section-head" style="margin-top:24px;">
+        <span class="count" id="boardCount">불러오는 중…</span>
+        <a href="#/board/${type}/new" class="btn btn-ball btn-sm">글쓰기</a>
+      </div>
+      <div id="boardList"><div class="loading-row">불러오는 중…</div></div>
+    </div>
+  `;
+
+  const {data: posts, error} = await sb.from(T.posts).select("*").eq("board_type", type).order("created_at",{ascending:false});
+  if(error) throw error;
+
+  document.getElementById("boardCount").textContent = `총 ${posts.length}건`;
+  const listEl = document.getElementById("boardList");
+  if(posts.length===0){
+    listEl.innerHTML = `<div class="empty-state">등록된 글이 없습니다. 첫 글을 남겨보세요.</div>`;
+    return;
+  }
+  listEl.innerHTML = `<div class="row-list">` + posts.map(p=>`
+    <a class="row-item" href="#/board/${type}/view/${p.id}">
+      <span class="row-main">
+        <div class="row-title">${esc(p.title)}</div>
+        <div class="row-meta">${esc(p.author)} · ${fmtDate(p.created_at.slice(0,10))} · 조회 ${p.views}</div>
+      </span>
+      <span class="row-arrow">›</span>
+    </a>
+  `).join("") + `</div>`;
+}
+
+/* =========================================================
+   게시판 - 작성/수정 (CRUD: Create, Update)
+   ========================================================= */
+async function renderPostForm(type, id){
+  if(!["notice","free"].includes(type)) return render404();
+  const isEdit = !!id;
+  let existing = null;
+  if(isEdit){
+    const {data, error} = await sb.from(T.posts).select("*").eq("id", id).single();
+    if(error || !data) return render404();
+    existing = data;
+  }
+  app.innerHTML = `
+    <div class="container" style="max-width:640px;">
+      <div class="page-title-bar">
+        <h1>${isEdit ? "글 수정" : "새 글 작성"}</h1>
+        <p>${BOARD_LABEL[type]}에 ${isEdit ? "작성된 글을 수정합니다." : "새 글을 남깁니다."}</p>
+      </div>
+      <div class="form-box" style="margin-top:24px;">
+        <div class="field"><label>이름</label><input id="p-author" type="text" placeholder="이름을 입력하세요" value="${esc(existing?.author||"")}" ${isEdit?"disabled":""}></div>
+        <div class="field"><label>제목</label><input id="p-title" type="text" placeholder="제목을 입력하세요" value="${esc(existing?.title||"")}"></div>
+        <div class="field"><label>내용</label><textarea id="p-content" placeholder="내용을 입력하세요" style="min-height:220px;">${esc(existing?.content||"")}</textarea></div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="btnSavePost">${isEdit ? "수정 완료" : "등록하기"}</button>
+          <a href="#/board/${type}${isEdit? "/view/"+id : ""}" class="btn btn-outline">취소</a>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById("btnSavePost").addEventListener("click", async ()=>{
+    const author = document.getElementById("p-author").value.trim();
+    const title = document.getElementById("p-title").value.trim();
+    const content = document.getElementById("p-content").value.trim();
+    if(!author || !title || !content){
+      toast("이름, 제목, 내용을 모두 입력해주세요.");
+      return;
+    }
+    if(isEdit){
+      const {error} = await sb.from(T.posts).update({title, content, updated_at: new Date().toISOString()}).eq("id", id);
+      if(error){ toast("수정 실패: "+error.message); return; }
+      toast("수정되었습니다.");
+      location.hash = `#/board/${type}/view/${id}`;
+    }else{
+      const {error} = await sb.from(T.posts).insert({board_type: type, author, title, content});
+      if(error){ toast("등록 실패: "+error.message); return; }
+      toast("글이 등록되었습니다.");
+      location.hash = `#/board/${type}`;
+    }
+  });
+}
+
+/* =========================================================
+   게시판 - 상세 (CRUD: Delete + 댓글)
+   ========================================================= */
+async function renderPostDetail(type, id){
+  if(!["notice","free"].includes(type)) return render404();
+  app.innerHTML = `<div class="container"><div class="loading-row">불러오는 중…</div></div>`;
+
+  const {data: post, error} = await sb.from(T.posts).select("*").eq("id", id).single();
+  if(error || !post) return render404();
+
+  sb.from(T.posts).update({views: (post.views||0)+1}).eq("id", id).then(()=>{});
+
+  const {data: comments} = await sb.from(T.comments).select("*").eq("post_id", id).order("created_at",{ascending:true});
+
+  app.innerHTML = `
+    <div class="container" style="max-width:700px;">
+      <div class="post-detail-head">
+        <span class="row-tag ${type==='notice'?'tag-notice':'tag-free'}" style="margin-bottom:12px;display:inline-block;">${BOARD_LABEL[type]}</span>
+        <h2>${esc(post.title)}</h2>
+        <div class="post-detail-meta">
+          <span>${esc(post.author)}</span>
+          <span>${fmtDateTime(post.created_at)}</span>
+          <span>조회 ${(post.views||0)+1}</span>
+        </div>
+      </div>
+      <div class="post-body">${esc(post.content)}</div>
+      <div class="post-detail-actions">
+        <a href="#/board/${type}" class="btn btn-outline btn-sm">목록으로</a>
+        <a href="#/board/${type}/edit/${id}" class="btn btn-outline btn-sm">수정</a>
+        <button class="btn btn-danger btn-sm" id="btnDeletePost">삭제</button>
+      </div>
+
+      <hr class="court-rule">
+
+      <h3 style="font-size:16px;margin-bottom:6px;">댓글 ${comments?comments.length:0}개</h3>
+      <div class="comment-list" id="commentList"></div>
+      <div class="comment-form">
+        <input id="c-author" type="text" placeholder="이름">
+        <textarea id="c-content" placeholder="댓글을 입력하세요"></textarea>
+        <button class="btn btn-primary btn-sm" id="btnAddComment">등록</button>
+      </div>
+    </div>
+  `;
+
+  function renderComments(list){
+    const wrap = document.getElementById("commentList");
+    if(!list || list.length===0){
+      wrap.innerHTML = `<div class="empty-state" style="padding:20px 4px;">첫 댓글을 남겨보세요.</div>`;
+      return;
+    }
+    wrap.innerHTML = list.map(c=>`
+      <div class="comment-item">
+        <div class="c-head">
+          <span><span class="c-author">${esc(c.author)}</span> · ${fmtDateTime(c.created_at)}</span>
+          <button class="btn btn-outline btn-sm" style="padding:4px 10px;" data-del-comment="${c.id}">삭제</button>
+        </div>
+        <div class="c-body">${esc(c.content)}</div>
+      </div>
+    `).join("");
+    wrap.querySelectorAll("[data-del-comment]").forEach(btn=>{
+      btn.addEventListener("click", async ()=>{
+        if(!confirm("댓글을 삭제할까요?")) return;
+        const {error} = await sb.from(T.comments).delete().eq("id", btn.getAttribute("data-del-comment"));
+        if(error){ toast("삭제 실패: "+error.message); return; }
+        renderPostDetail(type, id);
+      });
+    });
+  }
+  renderComments(comments);
+
+  document.getElementById("btnAddComment").addEventListener("click", async ()=>{
+    const author = document.getElementById("c-author").value.trim();
+    const content = document.getElementById("c-content").value.trim();
+    if(!author || !content){ toast("이름과 내용을 입력해주세요."); return; }
+    const {error} = await sb.from(T.comments).insert({post_id: id, author, content});
+    if(error){ toast("등록 실패: "+error.message); return; }
+    toast("댓글이 등록되었습니다.");
+    renderPostDetail(type, id);
+  });
+
+  document.getElementById("btnDeletePost").addEventListener("click", async ()=>{
+    if(!confirm("이 글을 삭제할까요? 댓글도 함께 삭제됩니다.")) return;
+    const {error} = await sb.from(T.posts).delete().eq("id", id);
+    if(error){ toast("삭제 실패: "+error.message); return; }
+    toast("삭제되었습니다.");
+    location.hash = `#/board/${type}`;
+  });
+}
+
+/* =========================================================
+   시작
+   ========================================================= */
+router();
+</script>
+</body>
+</html>
