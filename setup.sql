@@ -36,6 +36,8 @@ create table if not exists tc_events (
   max_participants  integer,
   description       text,
   host_name         text,
+  games_per_person  integer,
+  match_schedule    jsonb,
   created_at        timestamptz not null default now()
 );
 
